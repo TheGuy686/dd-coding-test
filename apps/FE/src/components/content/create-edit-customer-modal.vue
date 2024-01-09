@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
     props: {},
@@ -22,9 +22,15 @@ export default {
         };
     },
     methods: {
-        
-        show() { this.visible = true },
+        show(entity) {
+            this.setEntity(entity);
+            this.visible = true;
+        },
         hids() { this.visible = false },
+
+        ...mapMutations({
+            setEntity: 'setCreateEditEntity',
+        })
     },
 }
 </script>

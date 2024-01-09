@@ -13,73 +13,59 @@
 			
 			<template #headerCell="{ column }">
 
-				<template v-if="column.key === 'name'">
+				<template v-if="column.title == 'Actions'">
 
-					<span>
+					<a-col align="end">
 
-						<smile-outlined />
+						<span>Actions</span>
 
-						Name
-
-					</span>
+					</a-col>
 
 				</template>
+
+				<a-row v-else>	
+
+					<a-col justify="end">
+
+						<span>
+
+							{{ column.title }}
+	
+						</span>
+
+					</a-col>
+
+				</a-row>
 
 			</template>
-		
-			<template #bodyCell="{ column, record }">
 
-				<template v-if="column.key === 'name'">
+			<template #name="{ text }">
+				
+				{{ text }}
+			
+			</template>
 
-					<a>
+			<template v-slot:address="record">
 
-						{{ record.name }}
+				{{ record.record.addressLine1 }}, {{ record.record.addressLine2 }}, {{ record.record.postCode }}
 
-					</a>
+			</template>
 
-				</template>
+			<template v-slot:actions="record">
 
-				<template v-else-if="column.key === 'tags'">
+				<a-row align="end">
 
-					<span>
+					<a-button type="default" size="small" @click="$refs['ed-mdl'].show(record.record)">
 
-						<a-tag
-							v-for="tag in record.tags"
-							:key="tag"
-							:color="tag === 'loser' ? 'volcano' : tag.length > 5 ? 'geekblue' : 'green'"
-						>
+						<template #icon>
+							
+							<UserOutlined />
+						
+						</template>
 
-							{{ tag.toUpperCase() }}
+					</a-button>
 
-						</a-tag>
-
-					</span>
-
-				</template>
-
-				<template v-else-if="column.key === 'action'">
-
-					<span>
-
-						<a>Invite 一 {{ record.name }}</a>
-
-						<a-divider type="vertical" />
-
-						<a>Delete</a>
-
-						<a-divider type="vertical" />
-
-						<a class="ant-dropdown-link">
-
-							More actions
-
-							<down-outlined />
-
-						</a>
-
-					</span>
-
-				</template>
+				</a-row>
 
 			</template>
 
@@ -99,8 +85,11 @@ import { mapState } from 'vuex';
 import PageHeader from '../components/page-header.vue';
 import Modal from '../components/content/create-edit-customer-modal.vue';
 
+import { UserOutlined } from '@ant-design/icons-vue';
+
 export default {
 	components: {
+		UserOutlined,
 		PageHeader,
 		'ce-modal': Modal,
 	},
@@ -109,8 +98,10 @@ export default {
 			doingRequest: (state) => state.doingRequest,
 			customers: (state) => state?.customers ?? [],
 		}),
-		columns() {
-			return [
+	},
+	data() {
+		return {
+			columns: [
 				{
 					title: 'ID',
 					dataIndex: 'id',
@@ -119,15 +110,23 @@ export default {
 				{
 					title: 'Name',
 					dataIndex: 'name',
-					key: 'name',
+					sorter: true,
+					width: '20%',
+					slots: { customRender: 'name' },
 				},
 				{
-					title: 'Action',
-					key: 'action',
-					slots: { customRender: 'action' },
+					title: 'Address',
+					dataIndex: 'addressLine1',
+					slots: { customRender: 'address' },
 				},
-			];
-		},
+				{
+					title: 'Actions',
+					dataIndex: 'addressLine1',
+					width: '20%',
+					slots: { customRender: 'actions' },
+				},
+			]
+		};
 	},
 	mounted() {
 		setTimeout(async() => {
