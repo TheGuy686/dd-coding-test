@@ -15,8 +15,5 @@ RUN apt-get install telnet net-tools -y
 # Install dependencies and build the frontend
 RUN npm install
 
-# Expose the Frontend port
-# EXPOSE 3000
-
 # Run the frontend application
 CMD [ "npm", "run", "dev" ]
