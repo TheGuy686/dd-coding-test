@@ -46,7 +46,6 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./apps/API:/var/www/html
-      - ./:/var/www
     depends_on:
       - db
       - apache

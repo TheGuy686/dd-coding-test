@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install -y \
     rm -rf /var/lib/apt/lists/*
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/html
 
 # Copy application files
 COPY --chown=www-data . .
@@ -37,21 +37,20 @@ RUN mkdir -p /home/$user/.composer && chown -R $user:$user /home/$user
 RUN composer config -g repo.packagist composer https://packagist.org
 RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 
-# Clear Laravel cache
-RUN php artisan cache:clear
-RUN php artisan config:clear
-
-# Install the project PHP dependencies
-RUN composer install --no-interaction --prefer-dist && \
-    chmod -R 755 vendor && \
-    chmod -R 755 /var/www/storage && \
-    chmod -R 755 /var/www/bootstrap
+RUN chmod -R 755 /var/www/html \
+    && chown -R $user:$user /var/www/html
 
 # Switch to non-root user
 USER $user
 
-# Expose the desired port (assuming your Laravel app runs on port 8000)
-EXPOSE 8000
+RUN echo "$(pwd)"
+
+# Install the project PHP dependencies
+RUN composer install --no-interaction --prefer-dist
+
+# Clear Laravel cache AFTER copying the Laravel application
+RUN php artisan cache:clear
+RUN php artisan config:clear
 
 # Serve the Laravel application
 CMD php artisan serve --host=0.0.0.0 --port=8000
