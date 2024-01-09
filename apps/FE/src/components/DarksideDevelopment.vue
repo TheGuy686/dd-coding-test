@@ -3,15 +3,35 @@
 
     <a-layout-header style="background: #fff; padding: 16px;">
 
-		<h1>Welcome to Ant Design Page</h1>
+		<a-row justify="space-between" align="middle">
 
-		<a-button type="primary" @click="handleAdd">Create</a-button>
+			<a-col span="16" justify="center">
+
+				<h1>
+
+					Welcome to a Darkside Developments Technical Test by "Ryan J. Cooke"
+
+				</h1>
+
+			</a-col>
+
+			<a-col span="8" justify="center" align="end">
+
+				<a-button type="primary" @click="fetchCustomers()">
+
+					Create
+
+				</a-button>
+
+			</a-col>
+
+		</a-row>
 
     </a-layout-header>
 
 	<a-layout style="padding: 24px;">
 
-		<a-table :columns="columns" :data-source="data">
+		<a-table :columns="columns" :data-source="customers">
 			
 			<template #headerCell="{ column }">
 
@@ -94,36 +114,14 @@
 
 <script>
 import { ref, computed } from 'vue';
+import { mapState } from 'vuex';
 
 export default {
-	data() {
-		return {
-			data: [
-				{
-					key: '1',
-					name: 'John Brown',
-					age: 32,
-					address: 'New York No. 1 Lake Park',
-					tags: ['nice', 'developer'],
-				},
-				{
-					key: '2',
-					name: 'Jim Green',
-					age: 42,
-					address: 'London No. 1 Lake Park',
-					tags: ['loser'],
-				},
-				{
-					key: '3',
-					name: 'Joe Black',
-					age: 32,
-					address: 'Sidney No. 1 Lake Park',
-					tags: ['cool', 'teacher'],
-				},
-			],
-		};
-	},
+	
 	computed: {
+		...mapState({
+			customers: (state) => state?.customers ?? [],
+		}),
 		columns() {
 			return [
 				{
@@ -145,9 +143,17 @@ export default {
 		},
 	},
 	methods: {
-		handleAdd() {
-			console.log('Add button clicked');
-			// Logic to handle adding an item
+		async handleAdd() {
+		},
+		async fetchCustomers() {
+			const res = await this.$store.dispatch('fetchCustomers');
+console.log('res: ', res);
+			if (res) {
+				console.log('SUccess');
+			}
+			else {
+				console.log('error');
+			}
 		},
 		handleEdit(record) {
 			console.log('Edit button clicked for', record);
