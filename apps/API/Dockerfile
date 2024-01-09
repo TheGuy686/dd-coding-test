@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.1-apache
 
 # Arguments defined in docker-compose.yml
 ARG user
@@ -51,6 +51,12 @@ RUN composer install --no-interaction --prefer-dist
 # Clear Laravel cache AFTER copying the Laravel application
 RUN php artisan cache:clear
 RUN php artisan config:clear
+
+RUN php artisan config:cache
+
+RUN chown $user:$user /var/www/html/docs/init-project.sh
+RUN chmod 777 /var/www/html/docs/init-project.sh
+RUN chmod +x /var/www/html/docs/init-project.sh
 
 # Serve the Laravel application
 CMD php artisan serve --host=0.0.0.0 --port=8000

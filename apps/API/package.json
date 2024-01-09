@@ -3,7 +3,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "vite build"
+        "build": "vite build",
+        "init-pr": "./docs/init-project.sh"
     },
     "devDependencies": {
         "axios": "^1.6.1",

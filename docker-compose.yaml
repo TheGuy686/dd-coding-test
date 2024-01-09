@@ -46,11 +46,14 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ./apps/API:/var/www/html
+      - .env:/var/www/html/.env
     depends_on:
       - db
       - apache
+      - phpmyadmin
     networks:
       - default-web-server
+    command: bash -c "php artisan migrate --force && php artisan db:seed --class=CustomersTableSeeder"
 
   frontend:
     container_name: fe
