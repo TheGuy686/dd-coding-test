@@ -3,29 +3,11 @@
 
 	<a-layout style="padding: 24px;">
 
-		<a-row justify="space-between" align="middle">
-
-			<a-col span="16" justify="center">
-
-				<h1>
-
-					Welcome to a Darkside Developments Technical Test by "Ryan J. Cooke"
-
-				</h1>
-
-			</a-col>
-
-			<a-col span="8" justify="center" align="end">
-
-				<a-button type="primary" @click="fetchCustomers()">
-
-					Create
-
-				</a-button>
-
-			</a-col>
-
-		</a-row>
+		<page-header 
+			title='Welcome to a Darkside Developments Technical Test by "Ryan J. Cooke"'
+			right-btn-text="Create"
+			@right-btn-clicked="fetchCustomers()"
+		/>
 
 		<a-table :loading="doingRequest" :columns="columns" :data-source="customers">
 			
@@ -112,8 +94,10 @@
 import { ref, computed } from 'vue';
 import { mapState } from 'vuex';
 
+import PageHeader from '../components/page-header.vue';
+
 export default {
-	
+	components: { PageHeader },
 	computed: {
 		...mapState({
 			doingRequest: (state) => state.doingRequest,
