@@ -1,0 +1,15 @@
+{
+  "name": "darkside-developments-technical-test",
+  "version": "1.0.0",
+  "description": "Test code assignment",
+  "main": "index.js",
+  "scripts": {
+    "stop-all-dockers": "docker stop $(docker ps -q)",
+    "be-term": "docker exec -it be /bin/bash",
+    "serv-term": "docker-compose exec nginx sh",
+    "start": "docker-compose -f ./docker-compose.yaml down; docker-compose -f docker-compose.yaml --env-file '.env' up --build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
