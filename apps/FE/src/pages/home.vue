@@ -6,7 +6,7 @@
 		<page-header 
 			title='Welcome to a Darkside Developments Technical Test by "Ryan J. Cooke"'
 			right-btn-text="Create"
-			@right-btn-clicked="fetchCustomers()"
+			@right-btn-clicked="$refs['ed-mdl'].show()"
 		/>
 
 		<a-table :loading="doingRequest" :columns="columns" :data-source="customers">
@@ -25,9 +25,9 @@
 
 				</template>
 
-				</template>
-			
-				<template #bodyCell="{ column, record }">
+			</template>
+		
+			<template #bodyCell="{ column, record }">
 
 				<template v-if="column.key === 'name'">
 
@@ -87,6 +87,8 @@
 
     </a-layout>
 
+	<ce-modal ref="ed-mdl" />
+
 </div>
 </template>
 
@@ -95,9 +97,13 @@ import { ref, computed } from 'vue';
 import { mapState } from 'vuex';
 
 import PageHeader from '../components/page-header.vue';
+import Modal from '../components/content/create-edit-customer-modal.vue';
 
 export default {
-	components: { PageHeader },
+	components: {
+		PageHeader,
+		'ce-modal': Modal,
+	},
 	computed: {
 		...mapState({
 			doingRequest: (state) => state.doingRequest,
