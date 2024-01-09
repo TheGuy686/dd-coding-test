@@ -6,7 +6,7 @@
   "scripts": {
     "stop-all-dockers": "docker stop $(docker ps -q)",
     "be-term": "docker exec -it be /bin/bash",
-    "serv-term": "docker-compose exec nginx sh",
+    "serv-term": "docker-compose exec apache sh",
     "start": "docker-compose -f ./docker-compose.yaml down; docker-compose -f docker-compose.yaml --env-file '.env' up --build"
   },
   "keywords": [],

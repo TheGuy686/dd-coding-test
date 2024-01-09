@@ -16,31 +16,21 @@ services:
     networks:
       - default-web-server
 
-  # nginx:
-  #   container_name: web-server
-  #   restart: unless-stopped
-    # build:
-    #   context: ./nginx
-    #   dockerfile: Dockerfile
-  #   ports:
-  #     - 80:80
-  #     - 3000:3000
-    # volumes:
-    #   - ./:/var/www
-    #   - ./nginx:/etc/conf.d/
-    # networks:
-    #   - default-web-server
-
   apache:
     container_name: apache
     build:
       context: ./apache
       dockerfile: Dockerfile
     volumes:
-      - ./apache/deafult.conf:/usr/local/apache2/conf/default.conf
+      - ./apache/httpd.conf:/etc/apache2/httpd.conf
+      - ./apache/deafult.conf:/etc/apache2/sites-available/000-default.conf
       - ./apps:/usr/local/apache2/htdocs
+      - ./html:/var/www/html
     ports:
-      - 8080:80
+      - 80:8080
+      - 8080:8080
+      - 100:100
+      - 2000:2000
     restart: unless-stopped
     networks:
       - default-web-server
