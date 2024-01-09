@@ -31,7 +31,7 @@
 
 	<a-layout style="padding: 24px;">
 
-		<a-table :columns="columns" :data-source="customers">
+		<a-table :loading="doingRequest" :columns="columns" :data-source="customers">
 			
 			<template #headerCell="{ column }">
 
@@ -120,6 +120,7 @@ export default {
 	
 	computed: {
 		...mapState({
+			doingRequest: (state) => state.doingRequest,
 			customers: (state) => state?.customers ?? [],
 		}),
 		columns() {
@@ -142,23 +143,30 @@ export default {
 			];
 		},
 	},
+	mounted() {
+		setTimeout(async() => {
+			await this.fetchCustomers();
+		}, 200);
+	},
 	methods: {
-		async handleAdd() {
-		},
-		async fetchCustomers() {
-			const res = await this.$store.dispatch('fetchCustomers');
-console.log('res: ', res);
-			if (res) {
-				console.log('SUccess');
-			}
-			else {
-				console.log('error');
-			}
-		},
 		handleEdit(record) {
 			console.log('Edit button clicked for', record);
 			// Logic to handle editing an item
 			alert('edit clicked');
+		},
+		async handleAdd() {
+		},
+		async fetchCustomers() {
+			const res = await this.$store.dispatch('fetchCustomers');
+
+			if (!res) {
+				this.$notification.error({
+					message: 'Operation error',
+					description:
+					'There was an error retrieving your customers.',
+					duration: 500,
+				});
+			}
 		},
 	},
 };

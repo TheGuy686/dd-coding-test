@@ -1,16 +1,38 @@
 import { createStore } from 'vuex';
 import axios from '../plugins/axios';
 
+const newCustomerDefaults = {
+	name: '', 
+	email: '',
+	phone: '', 
+	addressLine1: '', 
+	addressLine2: '', 
+	postCode: '', 
+};
+
 const store = createStore({
 	state: {
-		doingRequeset: false,
+		doingRequest: false,
 		customers: [],
 		currentPage: 1,
+		isEdit: false,
+		entity: {},
 	},
 	getters: {},
 	mutations: {
+		setIsEdit(state, isEdit) { state.isEdit = isEdit },
+		setCreateEditEntity(state, customer) {
+			if (customer) {
+				state.isEdit = true;
+				state.entity = customer;
+			}
+			else {
+				state.isEdit = false;
+				state.entity = {...newCustomerDefaults};
+			}
+		},
 		setIsDoingRequest(state, requestState) {
-			state.doingRequeset = !!requestState;
+			state.doingRequest = !!requestState;
 		},
 		setCustomers(state, customers) {
 			state.customers = customers;
@@ -44,12 +66,14 @@ const store = createStore({
 
 				commit('setCustomers', response?.data?.data ?? []);
 
-				commit('setIsDoingRequest', false);
+				// this makes the loading state change a little smoother
+				setTimeout(() => commit('setIsDoingRequest', false), 300);
 
 				return true;
             }
             catch (err) {
-				commit('setIsDoingRequest', false);
+				// this makes the loading state change a little smoother
+				setTimeout(() => commit('setIsDoingRequest', false), 300);
 				return false;
 			}
 		},
@@ -65,10 +89,12 @@ const store = createStore({
 					commit('addCustomer', cus);
 				}
 
-				commit('setIsDoingRequest', false);
+				c// this makes the loading state change a little smoother
+				setTimeout(() => commit('setIsDoingRequest', false), 300);
 			}
 			catch (err) {
-				commit('setIsDoingRequest', false);
+				// this makes the loading state change a little smoother
+				setTimeout(() => commit('setIsDoingRequest', false), 300);
 				return false;
 			}
 		},
@@ -84,10 +110,12 @@ const store = createStore({
 					commit('updateCustomer', cus);
 				}
 
-				commit('setIsDoingRequest', false);
+				// this makes the loading state change a little smoother
+				setTimeout(() => commit('setIsDoingRequest', false), 300);
 			}
 			catch (err) {
-				commit('setIsDoingRequest', false);
+				// this makes the loading state change a little smoother
+				setTimeout(() => commit('setIsDoingRequest', false), 300);
 				return false;
 			}
 		},
