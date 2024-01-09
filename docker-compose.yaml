@@ -1,17 +1,68 @@
 version: '3.8'
 services:
+  db:
+    image: mysql:latest
+    container_name: mysql-container
+    logging:
+      options:
+        max-size: 10m
+    environment:
+      MYSQL_DATABASE: darkside_code_test
+      MYSQL_USER: user
+      MYSQL_ROOT_PASSWORD: user
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - default-web-server
+    volumes:
+      - ./apps/API/docs/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./:/var/www
+      
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-container
+    restart: always
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: user
+    ports:
+      - 1100:80
+    links:
+      - db
+    networks:
+      - default-web-server
+    depends_on:
+      - apache
+
+  backend:
+    container_name: be
+    restart: always
+    build:
+      args:
+        user: be-user
+        uid: 1000
+      context: ./apps/API
+      dockerfile: Dockerfile
+    volumes:
+      - ./apps/API:/var/www/html
+      - ./:/var/www
+    depends_on:
+      - db
+      - apache
+    networks:
+      - default-web-server
+
   frontend:
     container_name: fe
     restart: unless-stopped
     build:
       context: ./apps/FE
       dockerfile: Dockerfile
-    # ports:
-    #   - "3000:3000"
     volumes:
       - ./apps/FE:/usr/src/app
     depends_on:
-      # - backend
+      - backend
       - apache
     networks:
       - default-web-server
@@ -27,10 +78,9 @@ services:
       - ./apps:/usr/local/apache2/htdocs
       - ./html:/var/www/html
     ports:
-      - 80:8080
-      - 8080:8080
+      - 80:80
+      - 3000:80
       - 100:100
-      - 2000:2000
     restart: unless-stopped
     networks:
       - default-web-server

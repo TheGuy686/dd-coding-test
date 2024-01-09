@@ -4,6 +4,7 @@
   "description": "Test code assignment",
   "main": "index.js",
   "scripts": {
+    "dcr-clr": "docker builder prune",
     "stop-all-dockers": "docker stop $(docker ps -q)",
     "be-term": "docker exec -it be /bin/bash",
     "serv-term": "docker-compose exec apache sh",
