@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 /**
  * Create a new customer
  */
-Route::post('/customer', [CustomerController::class, 'create'])->name('customers.create');
+Route::post('/customer', 'App\Http\Controllers\CustomerController@create')->name('customers.create');
 
 /**
  * Update an existing customer
@@ -21,7 +21,7 @@ Route::post('/customer', [CustomerController::class, 'create'])->name('customers
  * @RouteParam: id: Number - The id of the customer
  * 
  */
-Route::put('/customer/{id}', [CustomerController::class, 'update'])->name('customers.update');
+Route::put('/customer/{id}', 'App\Http\Controllers\CustomerController@update')->name('customers.update');
 
 /**
  * Get all customers:
@@ -29,5 +29,5 @@ Route::put('/customer/{id}', [CustomerController::class, 'update'])->name('custo
  * @RouteParam: page: Number - The index of the paginated page
  * 
  */
-Route::get('/customer/all', [CustomerController::class, 'allCustomers']);
+Route::get('/customer/all', 'App\Http\Controllers\CustomerController@allCustomers');
 // Route::get('/customer/all', 'App\Http\Controllers\CustomerController@allCustomers');
