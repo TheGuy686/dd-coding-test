@@ -93,7 +93,7 @@
 
 		<a-layout-content :class="main-content">
 
-			<DarksideDevelopment />
+			<router-view></router-view>
 
 		</a-layout-content>
 
@@ -101,9 +101,8 @@
 
 </a-layout>
 </template>
-<script lang="ts">
-import DarksideDevelopment from './components/DarksideDevelopment.vue';
 
+<script lang="ts">
 import {
 	UserOutlined,
 	VideoCameraOutlined,
@@ -121,7 +120,6 @@ export default defineComponent({
 		UploadOutlined,
 		MenuUnfoldOutlined,
 		MenuFoldOutlined,
-		DarksideDevelopment,
 	},
 	setup() {
 		return {
