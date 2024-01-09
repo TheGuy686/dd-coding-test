@@ -1,7 +1,7 @@
 <template>
 <div>
 
-    <a-layout-header style="background: #fff; padding: 16px;">
+	<a-layout style="padding: 24px;">
 
 		<a-row justify="space-between" align="middle">
 
@@ -26,10 +26,6 @@
 			</a-col>
 
 		</a-row>
-
-    </a-layout-header>
-
-	<a-layout style="padding: 24px;">
 
 		<a-table :loading="doingRequest" :columns="columns" :data-source="customers">
 			
