@@ -1,7 +1,6 @@
 <template>
 <div>
-
-	<a-layout style="padding: 24px;">
+	<a-layout style="padding: 10px 10px 24px 24px;">
 
 		<page-header 
 			title='Welcome to a Darkside Developments Technical Test by "Ryan J. Cooke"'
@@ -9,7 +8,22 @@
 			@right-btn-clicked="$refs['ed-mdl'].show()"
 		/>
 
-		<a-table :loading="doingRequest" :columns="columns" :data-source="customers">
+		{{ paginationConfig }}
+
+		<!-- :pagination="paginationConfig" -->
+		
+		<a-table
+			:loading="doingRequest"
+			:columns="columns"
+			
+			:data-source="customers"
+			:pagination="{
+				current: currentPage,
+				pageSize: 10,
+				total: totalRecords,
+				onChange: handlePageChange,
+			}"
+		>
 			
 			<template #headerCell="{ column }">
 
@@ -80,7 +94,7 @@
 
 <script>
 import { ref, computed } from 'vue';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 import PageHeader from '../components/page-header.vue';
 import Modal from '../components/content/create-edit-customer-modal.vue';
@@ -93,10 +107,18 @@ export default {
 		PageHeader,
 		'ce-modal': Modal,
 	},
+	watch: {
+		async currentPage(to) {
+			await this.fetchCustomers();
+		},
+	},
 	computed: {
 		...mapState({
 			doingRequest: (state) => state.doingRequest,
 			customers: (state) => state?.customers ?? [],
+			currentPage: (state) => state.currentPage,
+			totalPages: (state) => state.totalPages,
+			totalRecords: (state) => state.totalRecords,
 		}),
 	},
 	data() {
@@ -134,12 +156,8 @@ export default {
 		}, 200);
 	},
 	methods: {
-		handleEdit(record) {
-			console.log('Edit button clicked for', record);
-			// Logic to handle editing an item
-			alert('edit clicked');
-		},
-		async handleAdd() {
+		handlePageChange(pageNumber) {
+			this.setCurrentPage(pageNumber);
 		},
 		async fetchCustomers() {
 			const res = await this.$store.dispatch('fetchCustomers');
@@ -149,10 +167,12 @@ export default {
 					message: 'Operation error',
 					description:
 					'There was an error retrieving your customers.',
-					duration: 500,
+					duration: 2,
 				});
 			}
 		},
+
+		...mapMutations({ setCurrentPage: 'setCurrentPage' }),
 	},
 };
 </script>

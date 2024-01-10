@@ -85,7 +85,7 @@ import { mapState, mapMutations } from 'vuex';
 export default {
     props: {},
     computed: {
-        ...mapState([ 'entity', 'isEdit', 'doingRequest' ]),
+        ...mapState([ 'entity', 'isEdit', 'doingRequest', 'lastError' ]),
 
         phNo() { return this.entity?.phone ?? '' },
         email() { return this.entity?.email ?? '' },
@@ -145,24 +145,26 @@ export default {
         async createEditCustomer() {
            if (!this.canSubmitForm) return false;
 
-           const res = await this.$store.dispatch(this.isEdit ? 'createCustomer' : 'updateCustomer');
+            const res = await this.$store.dispatch(this.isEdit ? 'updateCustomer' : 'createCustomer');
 
            if (!res) {
 				this.$notification.error({
 					message: 'Operation error',
 					description:
-					'There was an error retrieving your customers.',
-					duration: 500,
+					this.lastError ?? 'There was an error retrieving your customers.',
+					duration: 2,
 				});
 			}
-            else {
+            else {500
+                await this.$store.dispatch('fetchCustomers');
+
                 this.hide();
 
                 this.$notification.success({
 					message: 'Operation Successful',
 					description:
 					`The customer information was successfully ${this.isEdit ? 'updated' : 'created'}`,
-					duration: 500,
+					duration: 2,
 				});
             }
         },

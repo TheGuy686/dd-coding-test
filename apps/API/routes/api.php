@@ -30,4 +30,3 @@ Route::put('/customer/{id}', 'App\Http\Controllers\CustomerController@update')->
  * 
  */
 Route::get('/customer/all', 'App\Http\Controllers\CustomerController@allCustomers');
-// Route::get('/customer/all', 'App\Http\Controllers\CustomerController@allCustomers');

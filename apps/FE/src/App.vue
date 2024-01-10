@@ -1,4 +1,21 @@
-<style scoped>
+<style>
+@import './style.css';
+
+#app {
+	font-family: Avenir, Helvetica, Arial, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-align: center;
+	color: #2c3e50;
+	margin: 0px !important;
+	width: 100vw;
+    height: 100vh;
+}
+
+.root {
+	height: 100%;
+}
+
 #components-layout-demo-custom-trigger .trigger {
 	font-size: 18px;
 	line-height: 64px;
@@ -19,9 +36,16 @@
 }
 
 .layout-header {
-	background: #fff;
+	background: #fff !important;
 	padding: 0;
-	padding-left: 10px;
+	padding-left: 10px !important;
+	height: 64px;
+    padding-inline: 50px;
+    color: rgba(0, 0, 0, 0.88);
+    line-height: 64px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .site-layout .site-layout-background {
@@ -37,7 +61,7 @@
 </style>
 
 <template>
-<a-layout>
+<a-layout class="root">
 
 	<a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
 
@@ -65,7 +89,7 @@
 
 		</a-layout-header>
 
-		<a-layout-content :class="main-content">
+		<a-layout-content class="main-content">
 
 			<router-view></router-view>
 

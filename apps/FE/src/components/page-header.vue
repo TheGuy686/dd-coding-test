@@ -1,6 +1,6 @@
 <style scoped>
-.title {
-    font-size: 30px;
+.ph-title {
+    font-size: 20px;
     font-weight: bold;
 }
 </style>
@@ -8,9 +8,9 @@
 <template>
 <a-row justify="space-between" align="middle">
 
-    <a-col span="16" justify="center">
+    <a-col span="16" justify="center" align="left">
 
-        <h1 class="ph-ph-title">{{ title }}</h1>
+        <h1 class="ph-title">{{ title }}</h1>
 
     </a-col>
 

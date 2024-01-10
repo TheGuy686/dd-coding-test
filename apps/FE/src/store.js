@@ -12,6 +12,13 @@ const newCustomerDefaults = {
 
 const store = createStore({
 	state: {
+		// --------- PAGINATION START ---------
+		totalRecords: 1,
+		currentPage: 1,
+		totalPages: 0,
+		// --------- PAGINATION END ---------
+		
+		lastError: '',
 		doingRequest: false,
 		customers: [],
 		currentPage: 1,
@@ -20,6 +27,13 @@ const store = createStore({
 	},
 	getters: {},
 	mutations: {
+		// --------- PAGINATION START ---------
+		setTotalRecords(state, total) { state.totalRecords = total },
+		setCurrentPage(state, page) { state.currentPage = page },
+		setTotalPages(state, total) { state.totalPages = total },
+		// --------- PAGINATION END ---------
+
+		setLastError(state, msg) { state.lastError = msg },
 		setIsEdit(state, isEdit) { state.isEdit = isEdit },
 		setEntityProp(state, params) {
 			state.entity[params.key] = params.value;
@@ -40,34 +54,24 @@ const store = createStore({
 		setCustomers(state, customers) {
 			state.customers = customers;
 		},
-		setCurrentPage(state, page) {
-			state.currentPage = page;
-		},
-		addCustomer(state, customer) {
-			state.customers.push(customer);
-		},
-		updateCustomer(state, customer) {
-			const index = state.customers.findIndex(
-				(customer) => customer.id === customer.id
-			);
-
-			if (index !== -1) {
-				state.customers.splice(index, 1, customer);
-			}
-		},
 	},
 	actions: {
-		async fetchCustomers({ commit, state }, successCb) {
+		async fetchCustomers({ commit, state }) {
 			try {
 				commit('setIsDoingRequest', true);
 
                 const response = await axios.get('/customer/all', {
 					params: {
-						page: 1,
+						page: state.currentPage,
 					},
 				});
 
-				commit('setCustomers', response?.data?.data ?? []);
+				const body = response?.data;
+
+				commit('setTotalRecords', body?.total ?? 0);
+				commit('setTotalPages', body?.last_page ?? 0);
+				commit('setCurrentPage', body?.current_page ?? 0);
+				commit('setCustomers', body?.data ?? []);
 
 				// this makes the loading state change a little smoother
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
@@ -80,43 +84,49 @@ const store = createStore({
 				return false;
 			}
 		},
-		createCustomer({ commit }) {
+		async createCustomer({ commit, state }) {			
 			try {
+				commit('setLastError', '');
 				commit('setIsDoingRequest', true);
 
-				const res = axios.post('/customer', state.entity);
+				await axios.post('/customer', state.entity);
 
-				const cus = res?.data;
-
-				if (typeof cus == 'object' && Object.keys(cus).length > 0) {
-					commit('addCustomer', cus);
-				}
-
-				c// this makes the loading state change a little smoother
+				// this makes the loading state change a little smoother
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
+
+				commit('setLastError', '');
+
+				return true;
 			}
 			catch (err) {
+				const msg = err.response?.data?.message;
+
+				if (msg) commit('setLastError', msg);
+
 				// this makes the loading state change a little smoother
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
 				return false;
 			}
 		},
-		updateCustomer({ commit }) {
+		async updateCustomer({ commit, state }) {
 			try {
+				commit('setLastError', '');
 				commit('setIsDoingRequest', true);
 
-				const res = axios.put(`/customer/${state.entity.id}`, state.entity);
-
-				const cus = res?.data;
-
-				if (typeof cus == 'object' && Object.keys(cus).length > 0) {
-					commit('updateCustomer', cus);
-				}
+				await axios.put(`/customer/${state.entity.id}`, state.entity);
 
 				// this makes the loading state change a little smoother
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
+
+				commit('setLastError', '');
+
+				return true;
 			}
 			catch (err) {
+				const msg = err.response?.data?.message;
+
+				if (msg) commit('setLastError', msg);
+
 				// this makes the loading state change a little smoother
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
 				return false;

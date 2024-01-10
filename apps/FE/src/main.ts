@@ -7,6 +7,8 @@ import App from './App.vue';
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
+console.warn = () => {};
+
 const app = createApp(App);
 
 app.config.globalProperties.$axios = AxiosInstance;
