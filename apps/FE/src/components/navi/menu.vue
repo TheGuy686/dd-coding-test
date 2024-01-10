@@ -1,7 +1,7 @@
 <template>
 <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys">
 
-    <a-menu-item :key="rte.key" v-for="rte in routes">
+    <a-menu-item :key="rte.key" v-for="rte in routes" @click="$router.push(rte.path)">
 
 		<component :is="rte.icon" />
 
