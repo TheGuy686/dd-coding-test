@@ -2,12 +2,12 @@ import { createStore } from 'vuex';
 import axios from '../plugins/axios';
 
 const newCustomerDefaults = {
-	name: '', 
-	email: '',
-	phone: '', 
-	addressLine1: '', 
-	addressLine2: '', 
-	postCode: '', 
+	name: 'Ryan Cooke', 
+	email: 'ryanjcooke@hotmail.com',
+	phone: '09876859', 
+	addressLine1: 'Add Line 1', 
+	addressLine2: 'Add line 2', 
+	postCode: 'WF15 8jg', 
 };
 
 const store = createStore({
@@ -21,10 +21,13 @@ const store = createStore({
 	getters: {},
 	mutations: {
 		setIsEdit(state, isEdit) { state.isEdit = isEdit },
+		setEntityProp(state, params) {
+			state.entity[params.key] = params.value;
+		},
 		setCreateEditEntity(state, customer) {
 			if (customer) {
 				state.isEdit = true;
-				state.entity = customer;
+				state.entity = {...customer};
 			}
 			else {
 				state.isEdit = false;
@@ -77,11 +80,11 @@ const store = createStore({
 				return false;
 			}
 		},
-		createCustomer({ commit }, newCustomer) {
+		createCustomer({ commit }) {
 			try {
 				commit('setIsDoingRequest', true);
 
-				const res = axios.post('/customer', newCustomer);
+				const res = axios.post('/customer', state.entity);
 
 				const cus = res?.data;
 
@@ -98,11 +101,11 @@ const store = createStore({
 				return false;
 			}
 		},
-		updateCustomer({ commit }, customer) {
+		updateCustomer({ commit }) {
 			try {
 				commit('setIsDoingRequest', true);
 
-				const res = axios.put(`/customer/${customer.id}`, customer);
+				const res = axios.put(`/customer/${state.entity.id}`, state.entity);
 
 				const cus = res?.data;
 
