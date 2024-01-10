@@ -2,12 +2,12 @@ import { createStore } from 'vuex';
 import axios from '../plugins/axios';
 
 const newCustomerDefaults = {
-	name: 'Ryan Cooke', 
-	email: 'ryanjcooke@hotmail.com',
-	phone: '09876859', 
-	addressLine1: 'Add Line 1', 
-	addressLine2: 'Add line 2', 
-	postCode: 'WF15 8jg', 
+	name: '', 
+	email: '',
+	phone: '', 
+	addressLine1: '', 
+	addressLine2: '', 
+	postCode: '', 
 };
 
 const store = createStore({
