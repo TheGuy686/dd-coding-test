@@ -10,5 +10,9 @@
 # the sum of the size of physical memory and the size of exchange workspace to the process.
 sysctl vm.overcommit_memory=1
 
+echo "\n" >> /etc/sysctl.conf
+
+echo "vm.overcommit_memory=1" >> /etc/sysctl.conf
+
 # Start redis server
-redis-server /usr/local/etc/redis/redis.conf --bind redis-cache --save 20 1
+redis-server /usr/local/etc/redis/redis.conf --requirepass ${REDIS_PASSWORD} --bind 0.0.0.0

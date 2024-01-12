@@ -19,17 +19,22 @@ services:
       - default-web-server
 
   redis-commander:
-    image: rediscommander/redis-commander:latest
+    container_name: cache-ui
     restart: always
+    build:
+      context: ./redis/ui
+      dockerfile: Dockerfile
     environment:
-      - REDIS_HOSTS=${REDIS_HOST}:${REDIS_PORT}
+      - REDIS_HOST=${REDIS_HOST}
       - REDIS_PORT=${REDIS_PORT}
       - HTTP_USER=${REDIS_USER}
-      - REDIS_HTTP_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - ${REDIS_UI_PORT}:${REDIS_UI_PORT}
     networks: 
       - default-web-server
+    depends_on:
+      - redis-cache
 
   # ------------------- Redis CACHE END -------------------
 

@@ -7,6 +7,7 @@
     "stop-all-dockers": "docker stop $(docker ps -q)",
     "dcr-clr": "docker builder prune",
     "cache-term": "docker exec -it cache sh",
+    "cache-ui-term": "docker exec -it cache-ui sh",
     "be-term": "docker exec -it be /bin/bash",
     "serv-term": "docker-compose exec apache sh",
     "start": "docker-compose -f ./docker-compose.yaml down && docker-compose -f docker-compose.yaml --env-file '.env' up --build",
