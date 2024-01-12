@@ -1,14 +1,20 @@
 version: '3.8'
 services:
-# ------------------- Redis CACHE START -------------------
+  # ------------------- Redis CACHE START -------------------
   redis-cache:
-    image: redis:6.2-alpine
+    image: redis:7.2-alpine
+    container_name: cache
     restart: always
+    build:
+      context: ./redis
+      dockerfile: Dockerfile
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
     ports:
       - '${REDIS_PORT}:${REDIS_PORT}'
-    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
-    volumes: 
-      - cache:/data
+    privileged: true
+    volumes:
+      - ./redis/cache:/data
     networks:
       - default-web-server
 
