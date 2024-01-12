@@ -1,5 +1,33 @@
 version: '3.8'
 services:
+# ------------------- Redis CACHE START -------------------
+  redis-cache:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes: 
+      - cache:/data
+    networks:
+      - default-web-server
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    restart: always
+    environment:
+      - REDIS_HOSTS=${REDIS_HOST}:${REDIS_PORT}
+      - REDIS_PORT=${REDIS_PORT}
+      - HTTP_USER=${REDIS_USER}
+      - REDIS_HTTP_PASSWORD=${REDIS_PASSWORD}
+    ports:
+      - ${REDIS_UI_PORT}:${REDIS_UI_PORT}
+    networks:
+      - default-web-server
+
+  # ------------------- Redis CACHE END -------------------
+
+  # ------------------- Database START -------------------
   db:
     image: mysql:latest
     container_name: mysql-container
@@ -7,12 +35,12 @@ services:
       options:
         max-size: 10m
     environment:
-      MYSQL_DATABASE: darkside_code_test
+      MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: user
       MYSQL_ROOT_PASSWORD: user
     restart: always
-    ports:
-      - 8080:8080
+    # ports:
+    #   - 8080:8080
     networks:
       - default-web-server
     volumes:
@@ -27,7 +55,7 @@ services:
       PMA_HOST: db
       MYSQL_ROOT_PASSWORD: user
     ports:
-      - 1100:80
+      - ${PHP_MYADMIN_PORT}:80
     links:
       - db
     networks:
@@ -35,6 +63,9 @@ services:
     depends_on:
       - apache
 
+  # ------------------- Database END -------------------
+
+  # ------------------- Applications START -------------------
   backend:
     container_name: be
     restart: always
@@ -51,9 +82,10 @@ services:
       - db
       - apache
       - phpmyadmin
+      - redis-cache
     networks:
       - default-web-server
-    command: bash -c "php artisan migrate --force && php artisan db:seed --class=CustomersTableSeeder && php artisan serve --host=0.0.0.0 --port=8000"
+    command: bash -c "php artisan migrate --force && php artisan db:seed --class=CustomersTableSeeder && php artisan serve --host=0.0.0.0 --port=${API_PORT}"
 
   frontend:
     container_name: fe
@@ -68,6 +100,8 @@ services:
       - apache
     networks:
       - default-web-server
+
+  # ------------------- Applications END -------------------
 
   apache:
     container_name: apache
@@ -90,3 +124,7 @@ services:
 networks:
   default-web-server:
     driver: bridge
+
+volumes:
+  cache:
+    driver: local

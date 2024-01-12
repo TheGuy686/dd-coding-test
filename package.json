@@ -4,11 +4,14 @@
   "description": "Test code assignment",
   "main": "index.js",
   "scripts": {
+    "cache": "docker exec -it nodejs-posgresql_cache_1 redis-cli -a eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81",
     "dcr-clr": "docker builder prune",
     "stop-all-dockers": "docker stop $(docker ps -q)",
     "be-term": "docker exec -it be /bin/bash",
     "serv-term": "docker-compose exec apache sh",
-    "start": "docker-compose -f ./docker-compose.yaml down; docker-compose -f docker-compose.yaml --env-file '.env' up --build"
+    "start": "docker-compose -f ./docker-compose.yaml down; docker-compose -f docker-compose.yaml --env-file '.env' up --build",
+    "start-cache": "docker-compose -f ./docker-compose.yaml down && docker-compose -f docker-compose.yaml --env-file '.env' up --no-build",
+    "up": "docker-compose -f docker-compose.yaml --env-file '.env' up"
   },
   "keywords": [],
   "author": "",

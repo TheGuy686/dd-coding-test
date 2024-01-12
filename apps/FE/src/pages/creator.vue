@@ -78,6 +78,9 @@ h1 {
 						
 					<p>	
 						Thank you for considering my application.
+					</p>
+
+					<p>
 						Best regards, Ryan J Cooke
 					</p>
 

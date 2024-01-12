@@ -58,12 +58,16 @@
 	background: '#fff';
 	min-height: '280px';
 }
+
+.navigation-cont {
+	text-align: left;
+}
 </style>
 
 <template>
 <a-layout class="root">
 
-	<a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
+	<a-layout-sider class="navigation-cont" v-model:collapsed="collapsed" :trigger="null" collapsible>
 
 		<div class="logo" />
 
