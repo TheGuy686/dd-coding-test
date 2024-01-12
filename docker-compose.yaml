@@ -22,7 +22,7 @@ services:
       - REDIS_HTTP_PASSWORD=${REDIS_PASSWORD}
     ports:
       - ${REDIS_UI_PORT}:${REDIS_UI_PORT}
-    networks:
+    networks: 
       - default-web-server
 
   # ------------------- Redis CACHE END -------------------
@@ -37,10 +37,8 @@ services:
     environment:
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: user
-      MYSQL_ROOT_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     restart: always
-    # ports:
-    #   - 8080:8080
     networks:
       - default-web-server
     volumes:
@@ -53,7 +51,7 @@ services:
     restart: always
     environment:
       PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - ${PHP_MYADMIN_PORT}:80
     links:
