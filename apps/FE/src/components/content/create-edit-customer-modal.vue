@@ -70,7 +70,7 @@
                 })"
             />
 
-            <span class="danger-text" v-if="!phoneIsValid && phNo != ''">Given phone number was not a valid email format.<br>Expected: +44 459845 9848, 09043098 or 09 8876 7898</span>
+            <span class="danger-text" v-if="!phoneIsValid && phNo != ''">Given phone number was not a valid email format.<br>Expected: +56-985-985-9989, +44 098 090 0900, +440989878769 or 0894857699</span>
 
         </a-form-item>
 
@@ -83,7 +83,7 @@
 import { mapState, mapMutations } from 'vuex';
 
 export default {
-    props: {},
+    props: {},  
     computed: {
         ...mapState([ 'entity', 'isEdit', 'doingRequest', 'lastError' ]),
 
@@ -96,10 +96,17 @@ export default {
             return /^[\w-]+(?:\.[\w-]+)*@(?:[\w-]+\.)+[a-zA-Z]{2,7}$/.test(this.email);
         },
 
+        /** 
+         * Supported formats:
+         * - +56-985-985-9989
+         * - +44 098 090 0900
+         * - +440989878769
+         * - 0894857699
+        */
         phoneIsValid() {
             if (!(!!this.phNo)) return false;
 
-            return /^\+?\d{2,3}(\s?\d{3}){1,2}$/.test(this.phNo);
+            return /^([0-9]+)|(\+(\d{1,3})[-\s]?(\d{1,4})(?:[-\s]?(\d{1,4})){0,2})$/.test(this.phNo);
         },
 
         formIsValid() {
