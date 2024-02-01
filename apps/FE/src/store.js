@@ -60,7 +60,7 @@ const store = createStore({
 			try {
 				commit('setIsDoingRequest', true);
 
-                const response = await axios.get('/customer/all', {
+				const response = await axios.get('/customer/all', {
 					params: {
 						page: state.currentPage,
 					},
@@ -77,8 +77,8 @@ const store = createStore({
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
 
 				return true;
-            }
-            catch (err) {
+			}
+			catch (err) {
 				// this makes the loading state change a little smoother
 				setTimeout(() => commit('setIsDoingRequest', false), 300);
 				return false;

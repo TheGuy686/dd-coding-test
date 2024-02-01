@@ -7,7 +7,7 @@
 				right-btn-text="Create"
 				@right-btn-clicked="$refs['ed-mdl'].show()"
 			/>
-			
+
 			<a-table
 				:loading="doingRequest"
 				:columns="columns"
